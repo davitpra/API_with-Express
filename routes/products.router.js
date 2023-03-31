@@ -39,20 +39,28 @@ router.get("/", (req, res) =>{
 router.get('/:id', (req, res) => {
   // obtenemos el ide con req.parmas
   const { id } = req.params;
-  res.json({
+if (id === '999') {
+  res.status(404).json({
+    message: "notfound"
+  })
+} else {
+  res.status(200).json({
       id,
       name: 'iPhone X3',
       price: 32000,
   });
+}
+
 });
 
 router.post('/', (req, res) => {
   const body = req.body;
-  res.json({
+  res.status(201).json({
     message: 'created',
     data: body
   });
 });
+
 // el metodo patch necesita un id
 router.patch('/:id', (req, res) => {
   const { id } = req.params;
