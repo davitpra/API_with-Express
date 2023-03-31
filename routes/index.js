@@ -9,9 +9,9 @@ function routerApi(app) {
   const router = express.Router();
   // utilizamos el endpoint prodcutsRouter y lo nombramos products:
   app.use('/api/v1', router);
-  router.use('/products', productsRouter);
-  router.use('/categories', categoriesRouter);
-  router.use('/users', usersRouter);
+    router.use('/products', productsRouter);
+    router.use('/categories', categoriesRouter);
+    router.use('/users', usersRouter);
 }
 
 module.exports = routerApi;
