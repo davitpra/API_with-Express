@@ -12,6 +12,7 @@
   "author": "Dbyte <j.david.prado1716@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
