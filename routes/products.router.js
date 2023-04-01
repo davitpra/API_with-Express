@@ -1,24 +1,17 @@
 
 const express = require("express");
-const { faker } = require('@faker-js/faker');
+const ProductsService = require('../service/product.service')
+
 
 // creamos un router
 const router = express.Router()
 
+// iniciamos una instacia del servicio
+const service = new ProductsService()
+
 // ahora la ruta en lugar de ser /products va a ser /
 router.get('/', (req, res) => {
-  const products = []
-  const { size } = req.query
-  const limit    = parseInt(size) || 10
-
-  for (let index = 0; index < limit; index++) {
-      products.push({
-          name:  faker.commerce.productName(),
-          price: parseInt(faker.commerce.price(), 10),
-          image: faker.image.imageUrl(),
-      })
-  }
-
+ const products = service.find()
   res.json(products)
 })
 
@@ -37,47 +30,30 @@ router.get("/", (req, res) =>{
 
 //añadimos una ruta dinámica.
 router.get('/:id', (req, res) => {
-  // obtenemos el ide con req.parmas
   const { id } = req.params;
-if (id === '999') {
-  res.status(404).json({
-    message: "notfound"
-  })
-} else {
-  res.status(200).json({
-      id,
-      name: 'iPhone X3',
-      price: 32000,
-  });
-}
-
+  const product = service.findOne(id)
+  res.status(200).json(product);
 });
 
 router.post('/', (req, res) => {
   const body = req.body;
-  res.status(201).json({
-    message: 'created',
-    data: body
-  });
+  const newProduct = service.create(body)
+  res.status(201).json(newProduct)
 });
 
 // el metodo patch necesita un id
 router.patch('/:id', (req, res) => {
   const { id } = req.params;
   const body = req.body;
-  res.json({
-    message: 'update',
-    data: body,
-    id,
-  });
+  const product = service.update(id, body)
+  res.status(201).json(product)
 });
+
 // el metodo delete necesita un id
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
-  res.json({
-    message: 'deleted',
-    id,
-  });
+  const message = service.delete(id)
+  res.json(message);
 });
 
 // exportamos el router
