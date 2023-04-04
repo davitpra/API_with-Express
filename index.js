@@ -1,7 +1,7 @@
 const express = require('express');
 const routerApi = require('./routes');
 // los middlewares de error se deben importar despues del router
-const {errorHandler,logError} = require('./middlewares/errorsHandler')
+const {errorHandler,logError,boomErrorHandler} = require('./middlewares/errorsHandler')
 
 const app = express();
 const port = 3000;
@@ -19,6 +19,7 @@ app.get('/nueva-ruta', (req, res) => {
 routerApi(app);
 
 app.use(logError)
+app.use (boomErrorHandler)
 app.use(errorHandler)
 
 app.listen(port, () => {

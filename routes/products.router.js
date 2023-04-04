@@ -46,16 +46,14 @@ router.post('/',async (req, res) => {
 });
 
 // el metodo patch necesita un id
-router.patch('/:id',async (req, res) => {
+router.patch('/:id',async (req, res, next) => {
   try {
     const { id } = req.params;
     const body = req.body;
     const product = await service.update(id, body)
     res.status(201).json(product)
-  } catch(e){
-    res.status(404).json({
-      message: e.message
-    })
+  } catch(error){
+    next (error)
   }
 });
 
