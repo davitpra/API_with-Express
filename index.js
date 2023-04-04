@@ -1,12 +1,31 @@
 const express = require('express');
+const cors = require('cors')
 const routerApi = require('./routes');
-// los middlewares de error se deben importar despues del router
+
 const {errorHandler,logError,boomErrorHandler} = require('./middlewares/errorsHandler')
 
 const app = express();
 const port = 3000;
-// indicamos que recibimos archivos tipo JSON
+
 app.use(express.json());
+
+//lista de urls permitidas
+const whitelist = ['http://localhost:8080', 'https://myapp.co'];
+
+//configuracion del originen
+const options = {
+  origin: (origin, callback) => {
+    // si se incluye pasa el cors
+    if (whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      //lanza un error
+      callback(new Error('no permitido'));
+    }
+  }
+}
+//la utilziamos como un middleware
+app.use(cors(options))
 
 app.get('/', (req, res) => {
   res.send('Hola mi server en express');
