@@ -2,6 +2,12 @@
 const express = require("express");
 const ProductsService = require('../service/product.service')
 
+const validatorHandler = require('./../middlewares/validator.handler');
+const{
+  createProductSchema,
+  updateProductSchema,
+  getProductSchema
+} = require('./../schemas/product.schema')
 
 // creamos un router
 const router = express.Router()
@@ -15,47 +21,51 @@ router.get('/', async (req, res) => {
   res.json(products)
 })
 
-// enviamos un archivo JSON
-router.get("/", (req, res) =>{
-  res.json([{
-      name: 'Laptop Gamer',
-      price: 23000,
-  },
-  {
-      name: 'iPhone X3',
-      price: 32000,
-  }
-  ]);
-});
 
-//añadimos una ruta dinámica.
-router.get('/:id',async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const product = await service.findOne(id)
-    res.status(200).json(product);
-  } catch(error) {
-    next (error)
+router.get('/:id',
+  // validamos el id de los params
+  validatorHandler (getProductSchema, "params"),
+  //obtenemos la informacion con el id
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const product = await service.findOne(id)
+      res.status(200).json(product);
+    } catch(error) {
+      next (error)
+    }
   }
-});
+);
 
-router.post('/',async (req, res) => {
-  const body = req.body;
-  const newProduct = await service.create(body)
-  res.status(201).json(newProduct)
-});
+router.post('/',
+  // valido que sea un producto como lo definimos
+  validatorHandler (createProductSchema, "body"),
+  //hacemos el post
+  async (req, res) => {
+    const body = req.body;
+    const newProduct = await service.create(body)
+    res.status(201).json(newProduct)
+  }
+);
 
 // el metodo patch necesita un id
-router.patch('/:id',async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const body = req.body;
-    const product = await service.update(id, body)
-    res.status(201).json(product)
-  } catch(error){
-    next (error)
+router.patch('/:id',
+  // validamos el id
+  validatorHandler (getProductSchema, "params"),
+  // validamos el update
+  validatorHandler (updateProductSchema, "body"),
+  // hacemos la actualizacion
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const product = await service.update(id, body)
+      res.status(201).json(product)
+    } catch(error){
+      next (error)
+    }
   }
-});
+);
 
 // el metodo delete necesita un id
 router.delete('/:id',async (req, res) => {
