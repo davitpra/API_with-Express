@@ -13,7 +13,7 @@ app.use(express.json());
 //lista de urls permitidas
 const whitelist = ['http://localhost:8080', 'https://myapp.co'];
 
-//configuracion del originen
+//configuracion del origin
 const options = {
   origin: (origin, callback) => {
     // si se incluye pasa el cors o es el mismo origen
