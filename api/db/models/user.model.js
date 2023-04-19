@@ -33,6 +33,7 @@ const UserSchema = {
         defaultValue: Sequelize.NOW,
     },
 };
+
 // Model es la clase de donde extiende las querys
 class User extends Model {
   static associate() {

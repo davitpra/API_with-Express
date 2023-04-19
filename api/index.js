@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors')
 const routerApi = require('./routes');
 
-const {errorHandler,logError,boomErrorHandler} = require('./middlewares/errorsHandler')
+const {errorHandler,logError,boomErrorHandler, ormErrorHandler} = require('./middlewares/errorsHandler')
 
 const app = express();
 // le indicamos el puerto como una variable de entorno o el 3000
@@ -39,6 +39,7 @@ app.get('/api/nueva-ruta', (req, res) => {
 routerApi(app);
 
 app.use(logError)
+app.use(ormErrorHandler)
 app.use (boomErrorHandler)
 app.use(errorHandler)
 
