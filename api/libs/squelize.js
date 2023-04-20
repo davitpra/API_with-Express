@@ -15,7 +15,7 @@ const sequelize = new Sequelize(URI, {
   });
 // iniciamos el setup
 setupModels(sequelize);
-//creamos la estructura con la tablas de Usersquema.
-sequelize.sync();
+
+// sequelize.sync();
 
 module.exports = sequelize;
