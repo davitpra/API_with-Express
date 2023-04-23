@@ -1,8 +1,11 @@
 const { User, UserSchema } = require('./user.model');
+const { Customer, CustomerSchema } = require('./custumer.model');
 
 function setupModels(sequelize) {
-  //crea el esquema de datos con UserShema y conectate con sequelize.
   User.init(UserSchema, User.config(sequelize));
+  Customer.init(CustomerSchema, Customer.config(sequelize));
+
+  Customer.associate(sequelize.models);
 }
 
 module.exports = setupModels;
