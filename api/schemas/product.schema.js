@@ -1,7 +1,7 @@
 const Joi=require('joi');
 
 //definimos el tipo de datos
-const id=Joi.number().uuid();
+const id=Joi.number().integer();
 const name = Joi.string().min(3).max(15);
 const price = Joi.number().integer().min(10);
 const description = Joi.string().min(10);

@@ -2,7 +2,7 @@ const express = require('express');
 
 const UserService = require('../service/user.service');
 const validatorHandler = require('../middlewares/validatorHandler');
-const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/user.shema');
+const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/user.schema');
 
 const router = express.Router();
 // creamos un nuevo usuario.
