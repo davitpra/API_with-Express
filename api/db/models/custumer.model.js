@@ -34,6 +34,7 @@ const CustomerSchema  = {
     field: 'user_id',
     allowNull: false,
     type: DataTypes.INTEGER,
+    unique:true,
     //coneccion con la FK
     references: {
       model: USER_TABLE,

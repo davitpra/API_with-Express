@@ -9,6 +9,6 @@ module.exports = {
   },
   //con esto se borra la tabla
   down: async (queryInterface) => {
-    await queryInterface.drop(USER_TABLE);
+    await queryInterface.dropTable(USER_TABLE);
   },
 };
