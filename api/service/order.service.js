@@ -11,9 +11,18 @@ class OrderService {
 		return newOrder;
 	}
 
-	async find() {
-		return [];
-	}
+  async find(query) {
+    const options = {
+      include: ['category'],
+    };
+    const { limit, offset } = query;
+    if (limit && offset) {
+      options.limit = limit;
+      options.offset = offset;
+    }
+    const products = await models.Product.findAll(options);
+    return products;
+  }
 
 	async findOne(id) {
 		const order = await models.Order.findByPk(id, {
@@ -22,10 +31,16 @@ class OrderService {
 					association: 'customer',
 					include: ['user'],
 				},
+        'items'
 			],
 		});
 		return order;
 	}
+
+  async addItem(data) {
+    const newItem = await models.OrderProduct.create(data);
+    return newItem;
+  }
 
 	async update(id, changes) {
 		return {
