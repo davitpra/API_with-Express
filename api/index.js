@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors')
 const routerApi = require('./routes');
-const checkApiKey = require ('./middlewares/auth.handler')
+const passport = require('passport')
 
 const {errorHandler,logError,boomErrorHandler, ormErrorHandler} = require('./middlewares/errorsHandler')
 
@@ -29,6 +29,9 @@ const options = {
 //la utilziamos como un middleware
 app.use(cors(options))
 
+//inicilizamos passport
+app.use(passport.initialize());
+
 //llamamos a la autenticacion
 require('./utils/auth')
 
@@ -36,7 +39,7 @@ app.get('/api', (req, res) => {
   res.send('Hola mi server en express');
 });
 
-app.get('/api/nueva-ruta',checkApiKey, (req, res) => {
+app.get('/api/nueva-ruta',(req, res) => {
   res.send('Hola, soy una nueva ruta');
 });
 
@@ -48,5 +51,5 @@ app.use (boomErrorHandler)
 app.use(errorHandler)
 
 app.listen(port, () => {
-  console.log('Mi port' +  port);
+  // console.log('Mi port' +  port);
 });
