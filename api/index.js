@@ -29,6 +29,9 @@ const options = {
 //la utilziamos como un middleware
 app.use(cors(options))
 
+//llamamos a la autenticacion
+require('./utils/auth')
+
 app.get('/api', (req, res) => {
   res.send('Hola mi server en express');
 });

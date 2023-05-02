@@ -42,6 +42,13 @@ class UserService {
     await user.destroy();
     return { id };
   }
+
+  async findByEmail(email) {
+    const rta = await models.User.findOne({
+      where: { email },
+    });
+    return rta;
+  }
 }
 
 module.exports = UserService;
