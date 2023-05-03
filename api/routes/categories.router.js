@@ -4,6 +4,8 @@ const CategoryService = require('./../service/category.service');
 const validatorHandler = require('./../middlewares/validatorHandler');
 const { createCategorySchema, updateCategorySchema, getCategorySchema } = require('./../schemas/category.schema');
 
+const passport = require('passport');
+
 const router = express.Router();
 const service = new CategoryService();
 
@@ -28,8 +30,11 @@ router.get('/:id',
     }
   }
 );
-
+//solamente usuarios logeados pueden crear una categoria
 router.post('/',
+  // validamos el JWT
+  passport.authenticate('jwt', { session: false }),
+  //validamos el squema
   validatorHandler(createCategorySchema, 'body'),
   async (req, res, next) => {
     try {
