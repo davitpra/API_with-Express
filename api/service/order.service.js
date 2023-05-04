@@ -1,4 +1,4 @@
-// const boom = require('@hapi/boom');
+const boom = require('@hapi/boom');
 
 const { models } = require('./../libs/squelize');
 const { Op } = require('sequelize')
@@ -8,9 +8,24 @@ class OrderService {
 	}
 
 	async create(data) {
-		const newOrder = await models.Order.create(data);
-		return newOrder;
-	}
+    // Accedemos al modelo Customer y usando where encadenamos hacia user
+    const customer = await models.Customer.findAll({
+      where: {
+        '$user.id$': data.userId
+      },
+      include: ['user']
+    });
+    // Validamos que exista el customer
+    if (!customer) {
+      throw boom.notFound('Customer not found');
+    }
+    // Creamos un objeto con el customerId obtenido de la consulta
+    const dataOrder = {
+      customerId: customer[0].id
+    };
+    const newOrder = await models.Order.create(dataOrder);
+    return newOrder;
+  }
 
   async find(query) {
     const options = {
