@@ -78,6 +78,27 @@ class AuthService {
     await transporter.sendMail(infoMail);
     return { message: 'Mail sent' };
   }
+
+  async changePassword(token, newPassword) {
+    try {
+      //verifica el password
+      const payload = await jwt.verify(token, config.jwtRecoverySecret);
+      //encuentra el usuario con el sub
+      const user = await service.findOne(payload.sub);
+      // se verifica que el recoveryToken sea el de la BD
+      if (user.recoveryToken !== token) {
+        throw boom.unauthorized();
+      }
+      // encriptamos el password
+      const hash = await bcrypt.hash(newPassword, 10);
+      //actualizamos el password el usuario en la base de datos
+      await service.update(user.id, { recoveryToken: null, password: hash });
+      //enviamos un mensaje de exito.
+      return { message: 'Password changed' };
+    } catch (error) {
+      throw boom.unauthorized();
+    }
+  }
 }
 
 module.exports = AuthService;
