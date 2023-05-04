@@ -37,6 +37,11 @@ const UserSchema = {
         field: 'updated_at',
         defaultValue: Sequelize.NOW,
     },
+    recoveryToken: {
+      field: 'recovery_token',
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
 };
 
 // Model es la clase de donde extiende las querys
