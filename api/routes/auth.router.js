@@ -1,32 +1,31 @@
 const express = require('express');
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
+const AuthService = require('../service/auth.service');
 
 const router = express.Router();
-const { config } = require('../config/config');
+const service = new AuthService();
 
 router.post(
   '/login',
-  // verificamos el email y el password
   passport.authenticate('local', { session: false }),
-  //si todo sale bien pasa a este middleware
   async (req, res, next) => {
     try {
-      // se obtiene el usuario
       const user = req.user;
-      // se crea un payload con user
-      const payload = {
-        sub: user.id,
-        role: user.role,
-      };
-      // lo firmamos
-      const token = jwt.sign(payload, config.jwtSecret);
-      //enviamos el usuario y el token
-      res.json({ user, token });
+      res.json(service.signToken(user));
     } catch (error) {
       next(error);
     }
   }
 );
+
+router.post('/recovery', async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const rta = await service.sendMail(email);
+    res.json(rta);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
